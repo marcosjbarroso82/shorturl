@@ -38,7 +38,4 @@ These are some guidelines for scope and technology choice.
   2. Install pip in your environment
   3. run pip install -r requirement.txt from the root folder of the project
   4. run "python manage.py runserver" This leaves the project runnning on port 8000
- 
-# Installation with docker
- 1. Install docker following the instruction from the official page depending on your OS at https://www.docker.com/
- 2. From the root of the project run "docker compose-up" (you might need admin permissions). This leaves the project running on port 8000
+
