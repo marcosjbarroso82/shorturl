@@ -1,0 +1,15 @@
+version: '2'
+services:
+  # Web django app
+  server:
+    build: .
+    container_name: shorturl_backend
+    #restart: always
+    command: sh /usr/src/app/init.sh
+    #env_file: .env
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
