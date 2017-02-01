@@ -26,10 +26,9 @@ class DeviceUrl(BaseModel):
     class Meta:
         unique_together = ('type', 'url')
 
-
+from django.db.utils import IntegrityError
 class ShortUrl(BaseModel):
     id = models.CharField(primary_key=True, default=random_hash_generator, editable=False, max_length=8)
-    # target = models.URLField()
     target = models.URLField(unique=True)
     counter = models.PositiveIntegerField(default=0)
 
@@ -67,3 +66,10 @@ class ShortUrl(BaseModel):
 
     def get_device_url(self, type):
         return self.device_urls.filter(type=type).first()
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        try:
+            super().save(force_insert, force_update, using, update_fields)
+        except IntegrityError as e:
+            id = random_hash_generator()
+            self.save()
