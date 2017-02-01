@@ -16,17 +16,16 @@ class ShortUrlDetailView(BaseDetailView):
 
         if user_agent.is_mobile:
             device = 'mobile'
-        elif user_agent.is_mobile:
+        elif user_agent.is_tablet:
             device = 'tablet'
-        elif user_agent.is_mobile:
+        elif user_agent.is_pc:
             device = 'desktop'
 
         if device:
             device_url = obj.get_device_url(device)
             device_url.counter += 1
-            device.save()
-            redirect_url = device.target
-
+            device_url.save()
+            redirect_url = device_url.target
 
         obj.counter += 1
         obj.save()

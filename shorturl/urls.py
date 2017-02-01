@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/', include('shorturl.urls_api', namespace='api')),
     # url(r'^su/(?P<pk>[0-9a-z-]+)', ShortUrlDetailView.as_view(), name='short-url' ),
-    url(r'^su/(?P<pk>[-\w]+)/$', ShortUrlDetailView.as_view(), name='article-detail'),
+    url(r'^su/(?P<pk>[-\w]+)/$', ShortUrlDetailView.as_view(), name='redirect-short-url'),
 ]
 
 
