@@ -1,5 +1,5 @@
 from django.db import models
-from .utils import random_hash_generator
+from .utils import uuid4_hash_generator
 
 
 DEVICES = (
@@ -28,7 +28,7 @@ class DeviceUrl(BaseModel):
 
 from django.db.utils import IntegrityError
 class ShortUrl(BaseModel):
-    hash = models.CharField(unique=True, default=random_hash_generator, editable=False, max_length=8)
+    hash = models.CharField(unique=True, default=uuid4_hash_generator, editable=False, max_length=8)
     target = models.URLField(unique=True)
     counter = models.PositiveIntegerField(default=0)
 
