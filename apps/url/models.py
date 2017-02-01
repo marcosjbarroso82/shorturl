@@ -71,5 +71,5 @@ class ShortUrl(BaseModel):
         try:
             super().save(force_insert, force_update, using, update_fields)
         except IntegrityError as e:
-            id = random_hash_generator()
+            id = uuid4_hash_generator()
             self.save()
