@@ -28,7 +28,7 @@ class DeviceUrl(BaseModel):
 
 from django.db.utils import IntegrityError
 class ShortUrl(BaseModel):
-    id = models.CharField(primary_key=True, default=random_hash_generator, editable=False, max_length=8)
+    hash = models.CharField(unique=True, default=random_hash_generator, editable=False, max_length=8)
     target = models.URLField(unique=True)
     counter = models.PositiveIntegerField(default=0)
 

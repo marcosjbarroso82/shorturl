@@ -28,7 +28,7 @@ class TestShortUrlTests(APITestCase):
         old_short_url = ShortUrl.objects.create(target=old_target)
 
         client = RequestsClient()
-        response = client.patch('http://testserver/api/v1/urls/%s' % old_short_url.id, json={'target': new_target})
+        response = client.patch('http://testserver/api/v1/urls/%s' % old_short_url.hash, json={'target': new_target})
         assert response.status_code == 200
 
         short_url = dict(response.json())
@@ -98,7 +98,7 @@ class TestShortUrlTests(APITestCase):
         old_short_url.save()
 
         client = RequestsClient()
-        response = client.patch('http://testserver/api/v1/urls/%s' % old_short_url.id, json=new_data)
+        response = client.patch('http://testserver/api/v1/urls/%s' % old_short_url.hash, json=new_data)
         assert response.status_code == 200
 
         short_url = dict(response.json())

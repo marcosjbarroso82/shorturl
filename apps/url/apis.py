@@ -15,7 +15,8 @@ class ShortUrlModelViewSet(viewsets.ModelViewSet):
     reponse:
         [
       {
-        "id": "35C07D",
+		"id": 1,
+        "hash": "35C07D",
         "mobile_url": {
           "id": 1,
           "target": "http://mobile.youtube.com",
@@ -57,6 +58,7 @@ class ShortUrlModelViewSet(viewsets.ModelViewSet):
 
     """
     queryset = ShortUrl.objects.all()
+    lookup_field = 'hash'
     serializer_class = UrlModelSerializer
     # http_method_names = ['get', 'post']
 
