@@ -68,8 +68,7 @@ class ShortUrl(BaseModel):
         return self.device_urls.filter(type=type).first()
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        try:
-            super().save(force_insert, force_update, using, update_fields)
-        except IntegrityError as e:
-            id = uuid4_hash_generator()
-            self.save()
+        if not self.pk:
+            while ShortUrl.objects.filter(hash=self.hash).exists():
+                self.hash = uuid4_hash_generator()
+        super().save(force_insert, force_update, using, update_fields)
