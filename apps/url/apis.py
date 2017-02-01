@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from .models import ShortUrl, DeviceUrl
-from .serializers import UrlModelSerializer, ShortUrlModelSerializer
+from .serializers import UrlModelSerializer, DeviceUrlModelSerializer
 
 
 class ShortUrlModelViewSet(viewsets.ModelViewSet):
@@ -63,5 +63,5 @@ class ShortUrlModelViewSet(viewsets.ModelViewSet):
 
 class DeviceUrlModelViewSet(viewsets.ModelViewSet):
     queryset = DeviceUrl.objects.all()
-    serializer_class = ShortUrlModelSerializer
+    serializer_class = DeviceUrlModelSerializer
     # http_method_names = ['get']

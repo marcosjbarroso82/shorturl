@@ -4,18 +4,21 @@ from rest_framework import serializers
 from .models import ShortUrl, DeviceUrl
 
 
-class ShortUrlModelSerializer(serializers.ModelSerializer):
+class DeviceUrlModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DeviceUrl
-        fields = ('id', 'target', 'counter')
-        read_only_fields = ('id', 'counter',)
+        fields = ('id', 'target', 'counter', 'type')
+        read_only_fields = ('id', 'counter', 'type')
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
 
 class UrlModelSerializer(serializers.ModelSerializer):
-    mobile_url = ShortUrlModelSerializer(required=False)
-    tablet_url = ShortUrlModelSerializer(required=False)
-    desktop_url = ShortUrlModelSerializer(required=False)
+    mobile_url = DeviceUrlModelSerializer(required=False)
+    tablet_url = DeviceUrlModelSerializer(required=False)
+    desktop_url = DeviceUrlModelSerializer(required=False)
 
     class Meta:
         fields = '__all__'
@@ -28,16 +31,13 @@ class UrlModelSerializer(serializers.ModelSerializer):
         desktop_url = validated_data.pop('desktop_url', None)
         instance = ShortUrl.objects.create(**validated_data)
 
-        # Create related DeviceUrls
+        # Create Device Urls
         if mobile_url:
-            instance.mobile_url = mobile_url.get('target')
-            instance.save()
+            self.create_or_update_device_url(url=instance, type='mobile', data=mobile_url)
         if tablet_url:
-            instance.tablet_url = tablet_url.get('target')
-            instance.save()
+            self.create_or_update_device_url(url=instance, type='tablet', data=tablet_url)
         if desktop_url:
-            instance.desktop_url = desktop_url.get('target')
-            instance.save()
+            self.create_or_update_device_url(url=instance, type='desktop', data=desktop_url)
 
         return instance
 
@@ -51,16 +51,26 @@ class UrlModelSerializer(serializers.ModelSerializer):
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
-        # Update relate DeviceUrls
+        # Update or Create Device Urls
         if mobile_url:
-            instance.mobile_url = mobile_url.get('target')
+            self.create_or_update_device_url(url=instance, device_url=instance.mobile_url, type='mobile', data=mobile_url)
         if tablet_url:
-            instance.tablet_url = tablet_url.get('target')
+            self.create_or_update_device_url(url=instance, device_url=instance.tablet_url, type='tablet', data=tablet_url)
         if desktop_url:
-            instance.desktop_url = desktop_url.get('target')
+            self.create_or_update_device_url(url=instance, device_url=instance.desktop_url, type='desktop', data=desktop_url)
 
         instance.save()
-
         return instance
 
-
+    @staticmethod
+    def create_or_update_device_url(url=None, device_url=None, type='', data=None):
+        if device_url and type:
+            # Upadate Device Url
+            serializer = DeviceUrlModelSerializer(instance=device_url, data=data)
+            serializer.is_valid()
+            serializer.save()
+        elif url and data:
+            # Create Device Url
+            serializer = DeviceUrlModelSerializer(data=data)
+            serializer.is_valid()
+            serializer.save(url=url, type=type)

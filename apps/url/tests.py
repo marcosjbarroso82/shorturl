@@ -29,10 +29,6 @@ class TestShortUrlTests(APITestCase):
 
         client = RequestsClient()
         response = client.patch('http://testserver/api/v1/urls/%s' % old_short_url.id, json={'target': new_target})
-        # import ipdb; ipdb.set_trace()
-        print(20*"=")
-        print(response.status_code)
-        print(response.content)
         assert response.status_code == 200
 
         short_url = dict(response.json())
